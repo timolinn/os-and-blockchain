@@ -4,14 +4,16 @@
 + Bitcoin combines the idea of using computational puzzles to regulate the creation of new currency units with the idea of secure timestamping to record a ledger of transactions and prevent double spending.
 
 ## Chapter 1 - Introduction to Cryptography and Cryptocurrencies
+
 + Bitcoin uses cryptography to provide security and prevent cheating.
 + Cryptography provides a mechanism for securely encoding the rules of a cryptocurrency system in the system itself.
 
 ### Section 1.1 - Cryptographic Hash Functions
+
 + A hash function is a mathematical function with the three following properties:
-    - its input can be a string of any size (arbitrary length).
-    - it produces a fixed size output. For the purpose of making the discussion in this chapter concrete, we will assume a 256‐bit output size. However, our discussion holds true for any output size as long as it is sufficiently large.
-    - It is efficiently computable. Intuitively this means that for a given input string, you can figure out what the output of the hash function is in a reasonable amount of time. More technically, computing the hash of an n ‐bit string should have a running time that is O( n ).
+  + its input can be a string of any size (arbitrary length).
+  + it produces a fixed size output. For the purpose of making the discussion in this chapter concrete, we will assume a 256‐bit output size. However, our discussion holds true for any output size as long as it is sufficiently large.
+    + It is efficiently computable. Intuitively this means that for a given input string, you can figure out what the output of the hash function is in a reasonable amount of time. More technically, computing the hash of an n ‐bit string should have a running time that is O( n ).
 + A cryptographcally secure hash function must have the following properties: 1) Collosion-resitance 2) Hiding 3) puzzle-friendliness.
 + Puzzle friendliness is specific to cryptocurrencies not the general hash funtions requirements.
 + A hash function H is said to be collision resistant if it is infeasible to find two values, x and y, such that x ≠ y, yet H(x) = H(y).
@@ -20,17 +22,19 @@
 + _Min-Entropy_ is a measure of how predictable an outcome is, and high min-entropy captures the intuitive idea that the distribution of say, a random variable, is very spread out.
 + An Application of _Hiding_ can be something called _Commitment Scheme_.
 + _Puzzle Friendliness_ means that if someone wants to target the hash function to come out to some particular output value y, that if there’s part of the input that is chosen in a suitably randomized way, it’s very difficult to find another value that hits exactly that target. This can be explained further using a search puzzle:
-    - Say we have a search puzzle that requires searching a very large space to find the solution to a mathematical problem and there are no shortcuts but to actually search the very large space.
-    ```
+  + Say we have a search puzzle that requires searching a very large space to find the solution to a mathematical problem and there are no shortcuts but to actually search the very large space.
+
+  ```math
        H(id || x) ∈ Y. [|| means concatenation]
         - H is the hash function
         - id is the puzzle ID -- chosen from a high min-entropy distribution
         - Y is the target set.
-    ```
-    - Our two inputs are `x` and `id`. The solution is finnding an input that the output falls within the set `Y`.
-    - The value of set `Y` determines how hard the puzzle is.
-    - The fact that the puzzle ID is choosen from a hight min-entropy distribution ensures that there are no shortcuts to solving the puzzle.
-    - A search puzzle that is puzzle friendly implies that there are no strategies to solving the search puzzle.
+  ```
+
+  + Our two inputs are `x` and `id`. The solution is finnding an input that the output falls within the set `Y`.
+  + The value of set `Y` determines how hard the puzzle is.
+  + The fact that the puzzle ID is choosen from a hight min-entropy distribution ensures that there are no shortcuts to solving the puzzle.
+  + A search puzzle that is puzzle friendly implies that there are no strategies to solving the search puzzle.
 
 + Bitcoin uses _`SHA-256`_. SHA‐256 uses a compression function that takes 768‐bit input and produces 256‐bit outputs. The block size is 512 bits.
 +SHA‐256 uses the Merkle‐Damgard transform to turn
@@ -38,6 +42,7 @@ a fixed‐length collision‐resistant compression function into a hash function
 + The _Merkle-Damgard transform_ is a generic method for converting a hash function that accept on fixed-length input to hash function that accept input of arbitrary length. When this happens the underlying fixed-length hash function is called _compression function_. If the comporession function is collision-resistant, the the overall hash function is collision-resistant as well.
 
 ### Section 1.2 - Hash Pointers and Data Structures.
+
 + A hash pointer is a data structure and a pointer to where some information is stored together with a cryptographic hash of the information at some fixed point in time.
 + A regular pointer gives you a way to retrieve the information, a hash pointer gives you a way to retrieve the information as well as verify the information has not been modified.
 + A Blockchain is a linked list that is built with hash pointers instead of regular pointers.
@@ -49,6 +54,7 @@ a fixed‐length collision‐resistant compression function into a hash function
 + The way we do that is simply by showing a path to the item that’s just before where the item in question would be and showing the path to the item that is just after where it would be. If these two items are consecutive in the tree, then this serves as a proof that the item in question is not included.
 
 ### Section 1.3 - Digital Signatures
+
 + Digital Signatures, along with hash functions are cryptographic primitives that serve as building blocks to a cryptocurrency.
 + (sk, pk) := generateKeys( keysize ) The generateKeys method takes a key size and generates a key pair. The secret key sk is kept privately and used to sign messages. pk is the public verification key that you give to everybody. Anyone with this key can verify your signature.
 + sig := sign( sk , message ) The sign method takes a message and a secret key, sk , as input and outputs a signature for message under sk.
@@ -58,6 +64,7 @@ a fixed‐length collision‐resistant compression function into a hash function
 + Bitcoin uses `ECDSA` (Elliptic Curve Digital Signature Algorithm). More specifically `secp256k1` which is estimated to produce 128 bits of security.
 
 #### Sizes of various quantities are:
+
 + Private key: 256 bits
 + Public key, uncompressed: 512 bits
 + Public key, compressed: 257 bits
@@ -65,9 +72,11 @@ a fixed‐length collision‐resistant compression function into a hash function
 + Signature: 512 bits
 
 ### Section 1.4 - PUblic Keys as Identities
+
 + The idea is to take a public key, one of those public verification keys from a digital signature scheme, and equate that to an identity of a person or an actor in a system.
 
 ### Section 1.5 - A simple Cryptocurrency
+
 + Eat your _cryptographic vegetables_. 😄
 
 #### GoofyCoin
