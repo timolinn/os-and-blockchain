@@ -13,8 +13,12 @@
 + A hash function is a mathematical function with the three following properties:
   + its input can be a string of any size (arbitrary length).
   + it produces a fixed size output. For the purpose of making the discussion in this chapter concrete, we will assume a 256‐bit output size. However, our discussion holds true for any output size as long as it is sufficiently large.
-    + It is efficiently computable. Intuitively this means that for a given input string, you can figure out what the output of the hash function is in a reasonable amount of time. More technically, computing the hash of an n ‐bit string should have a running time that is O( n ).
-+ A cryptographcally secure hash function must have the following properties: 1) Collosion-resitance 2) Hiding 3) puzzle-friendliness.
+  + It is efficiently computable. Intuitively this means that for a given input string, you can figure out what the output of the hash function is in a reasonable amount of time. More technically, computing the hash of an n ‐bit string should have a running time that is O( n ).
+
++ A cryptographcally secure hash function must have the following properties:
+  1) Collision-resitance
+  2) Hiding
+  3) puzzle-friendliness.
 + Puzzle friendliness is specific to cryptocurrencies not the general hash funtions requirements.
 + A hash function H is said to be collision resistant if it is infeasible to find two values, x and y, such that x ≠ y, yet H(x) = H(y).
 + Hashes are used to verify file integrity, say we generate a _message digest_ of a file we upload to a server and store it somewhere secure, we can compute the hash when we redownload our file and compare it to the one we stored to verify that it has not been modified. Hash functions provide the ability to perform such verification by being _collision-free_.
@@ -37,11 +41,10 @@
   + A search puzzle that is puzzle friendly implies that there are no strategies to solving the search puzzle.
 
 + Bitcoin uses _`SHA-256`_. SHA‐256 uses a compression function that takes 768‐bit input and produces 256‐bit outputs. The block size is 512 bits.
-+SHA‐256 uses the Merkle‐Damgard transform to turn
-a fixed‐length collision‐resistant compression function into a hash function that accepts arbitrary‐length inputs.
-+ The _Merkle-Damgard transform_ is a generic method for converting a hash function that accept on fixed-length input to hash function that accept input of arbitrary length. When this happens the underlying fixed-length hash function is called _compression function_. If the comporession function is collision-resistant, the the overall hash function is collision-resistant as well.
++ SHA‐256 uses the Merkle‐Damgard transform to turn a fixed‐length collision‐resistant compression function into a hash function that accepts arbitrary‐length inputs.
++ The _Merkle-Damgard transform_ is a generic method for converting a hash function that accept on fixed-length input to hash function that accept input of arbitrary length. When this happens the underlying fixed-length hash function is called _compression function_. If the comporession function is collision-resistant, the overall hash function is collision-resistant as well.
 
-### Section 1.2 - Hash Pointers and Data Structures.
+### Section 1.2 - Hash Pointers and Data Structures
 
 + A hash pointer is a data structure and a pointer to where some information is stored together with a cryptographic hash of the information at some fixed point in time.
 + A regular pointer gives you a way to retrieve the information, a hash pointer gives you a way to retrieve the information as well as verify the information has not been modified.
@@ -63,7 +66,7 @@ a fixed‐length collision‐resistant compression function into a hash function
 + If I sign a message with sk, my secret key, and someone later tries to validate that signature over that same message using my public key, pk, the signature must validate correctly. This property is a basic requirement for signatures to be useful at all.
 + Bitcoin uses `ECDSA` (Elliptic Curve Digital Signature Algorithm). More specifically `secp256k1` which is estimated to produce 128 bits of security.
 
-#### Sizes of various quantities are:
+#### Sizes of various quantities are
 
 + Private key: 256 bits
 + Public key, uncompressed: 512 bits
@@ -71,7 +74,7 @@ a fixed‐length collision‐resistant compression function into a hash function
 + Message to be signed: 256 bits
 + Signature: 512 bits
 
-### Section 1.4 - PUblic Keys as Identities
+### Section 1.4 - Public Keys as Identities
 
 + The idea is to take a public key, one of those public verification keys from a digital signature scheme, and equate that to an identity of a person or an actor in a system.
 
