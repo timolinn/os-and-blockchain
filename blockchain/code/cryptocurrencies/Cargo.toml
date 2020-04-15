@@ -1,7 +1,0 @@
-[package]
-name = "cryptocurrencies"
-version = "0.1.0"
-authors = ["timolinn <timothyonyiuke@gmail.com>"]
-edition = "2018"
-
-[dependencies]
