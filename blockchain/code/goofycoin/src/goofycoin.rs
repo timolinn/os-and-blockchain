@@ -10,67 +10,74 @@
 //! 2. This coin is reprensented by a unique identity.
 //! 3. It can be spent by making a "statement" and generating a hash
 //! pointer that points to the coin and signed by goofy's PK
+#![allow(unused)]
 use rand::{thread_rng, Rng};
 use rand::distributions::Alphanumeric;
 use openssl::sha::sha256;
+use openssl::{ec, ecdsa, nid};
+use openssl::sign::{Signer, Verifier};
+use openssl::pkey::{Private, Public};
 use nanoid::simple;
 
-pub struct GoofyCoin {
-    unique_id: String,
-    signed: String,
-    owner: Person
-}
-
-#[derive(Copy, Clone)]
+#[derive(Clone)]
 pub struct Person {
-    name: &'static str,
-    pk: [u8; 32],
-    sk: [u8; 32]
+    pub name: &'static str,
+    pub pk: ec::EcKey<Public>,
+    sk: ec::EcKey<Private>
 }
 
 impl Person {
     pub fn new(name: &'static str) -> Person {
+        // generating private and public key
+        // https://docs.rs/openssl/0.10.29/src/openssl/ecdsa.rs.html#174
+        let group = ec::EcGroup::from_curve_name(nid::Nid::X9_62_PRIME192V1).unwrap();
+        println!("{}", nid::Nid::X9_62_PRIME192V1.as_raw());
+        let private_key = ec::EcKey::generate(&group).unwrap();
+        let public_key_point = private_key.public_key();
+
         Person {
             name,
-            pk: sha256(random_value().as_bytes()),
-            sk: sha256(random_value().as_bytes())
+            pk: ec::EcKey::from_public_key(&group, public_key_point).unwrap(),
+            sk: private_key
         }
     }
 
-    pub fn sign(&mut self) -> String {
-        let sig = String::from("signature");
-        sig
+    pub fn sign(&self, data: String) -> ecdsa::EcdsaSig {
+        ecdsa::EcdsaSig::sign(data.as_bytes(), &self.sk).unwrap()
     }
 
     pub fn name(&self) -> &str {
         &self.name
     }
 
-    pub fn public_key(&self) -> String {
-        hex::encode(self.pk)
-    }
-
-    pub fn secret_key(&self) -> String {
-        hex::encode(self.sk)
-    }
+    // pub fn public_key(&self) -> String {
+    //     hex::encode(self.pk)
+    // }
 }
 
 fn random_value() -> String {
     let rand_string: String = thread_rng()
         .sample_iter(&Alphanumeric)
-        .take(30)
+        .take(32)
         .collect();
 
     rand_string
 }
 
+
+pub struct GoofyCoin {
+    unique_id: String,
+    pub signed: ecdsa::EcdsaSig,
+    owner: Person
+}
+
 impl GoofyCoin {
-    pub fn new() -> GoofyCoin {
-        let mut goofy = Person::new("goofy");
+    pub fn new(goofy: Person) -> GoofyCoin {
+        let uid = simple();
         GoofyCoin {
-            unique_id: simple(),
-            owner: goofy,
-            signed: goofy.sign()
+            unique_id: uid.clone(),
+            owner: goofy.clone(),
+            signed: goofy.sign(uid)
         }
     }
 }

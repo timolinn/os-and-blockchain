@@ -7,5 +7,6 @@ mod goofycoin;
 
 fn main() {
     let goofy = goofycoin::Person::new("goofy");
-    println!("name={:}\nPublic Key={:?}\nSecret Key={:?}", goofy.name(), goofy.public_key(), goofy.secret_key());
+    let coin = goofycoin::GoofyCoin::new(goofy.clone());
+    println!("name={:?}\nPublic Key={:?}\nsignature=", goofy.name(), goofy.pk);
 }
