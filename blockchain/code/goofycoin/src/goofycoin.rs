@@ -18,8 +18,9 @@ use openssl::{ec, ecdsa, nid};
 use openssl::sign::{Signer, Verifier};
 use openssl::pkey::{Private, Public};
 use nanoid::simple;
+use std::{time, thread};
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Person {
     pub name: &'static str,
     pub pk: ec::EcKey<Public>,
@@ -31,7 +32,6 @@ impl Person {
         // generating private and public key
         // https://docs.rs/openssl/0.10.29/src/openssl/ecdsa.rs.html#174
         let group = ec::EcGroup::from_curve_name(nid::Nid::X9_62_PRIME192V1).unwrap();
-        println!("{}", nid::Nid::X9_62_PRIME192V1.as_raw());
         let private_key = ec::EcKey::generate(&group).unwrap();
         let public_key_point = private_key.public_key();
 
@@ -50,9 +50,17 @@ impl Person {
         &self.name
     }
 
-    // pub fn public_key(&self) -> String {
-    //     hex::encode(self.pk)
-    // }
+    pub fn transfer_coin(&self, mut coin: GoofyCoin, p: &Person) -> Result<GoofyCoin, String> {
+        if (coin.verify(&self)) {
+            println!("Transferring coin ownership...");
+            thread::sleep(time::Duration::from_millis(3000));
+            coin.signed = p.sign(coin.unique_id.clone());
+            coin.owner = p.clone();
+            println!("Coin transferred to {}", p.name());
+            return Ok(coin);
+        }
+        Err(String::from("failed to transfer coin"))
+    }
 }
 
 fn random_value() -> String {
@@ -66,7 +74,7 @@ fn random_value() -> String {
 
 
 pub struct GoofyCoin {
-    unique_id: String,
+    pub unique_id: String,
     pub signed: ecdsa::EcdsaSig,
     owner: Person
 }
@@ -79,5 +87,17 @@ impl GoofyCoin {
             owner: goofy.clone(),
             signed: goofy.sign(uid)
         }
+    }
+
+    pub fn signature(&self) -> String {
+        hex::encode(self.signed.to_der().unwrap())
+    }
+
+    pub fn verify(&self, p: &Person) -> bool {
+        self.signed.verify(self.unique_id.as_bytes(), &p.pk).unwrap()
+    }
+
+    pub fn owner(&self) -> &Person {
+        &self.owner
     }
 }
