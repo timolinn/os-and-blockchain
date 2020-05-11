@@ -1,3 +1,7 @@
+
+mod scroogecoin;
+use scroogecoin::Scroogecoin;
 fn main() {
-    println!("Hello, world!");
+    let scrooge  = Scroogecoin::new();
+    println!("Hello, {:?}", scrooge);
 }

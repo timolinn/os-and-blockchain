@@ -83,3 +83,17 @@
 + Eat your _cryptographic vegetables_. 😄
 
 #### GoofyCoin
+
+You can find complete implementation <https://github.com/timolinn/os-and-blockchain/tree/master/blockchain/code/goofycoin>
+
+#### Scroogecoin
+
+You can find the incomplete implementation <https://github.com/timolinn/os-and-blockchain/tree/master/blockchain/code/scroogecoin>
+
+## How Bitcoin achieves Decentralization
+
+### Aspects of decentralization in Bitcoin
+
++ Peer to Peer network
++ Mining
++ Updates to software

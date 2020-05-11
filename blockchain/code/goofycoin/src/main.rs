@@ -5,14 +5,16 @@ extern crate hex;
 
 mod goofycoin;
 
+use goofycoin::{Person, GoofyCoin};
+
 fn main() {
-    let goofy = goofycoin::Person::new("goofy");
-    let mut coin = goofycoin::GoofyCoin::new(goofy.clone());
+    let goofy = Person::new("goofy");
+    let mut coin = GoofyCoin::new(goofy.clone());
     println!("name={:?}\nPublic Key={:?}\nsignature={:?}", goofy.name(), goofy.pk, coin.signature());
 
     println!("{}", coin.verify(&goofy));
 
-    let alice = goofycoin::Person::new("Alice");
+    let alice = Person::new("Alice");
     println!("{}", coin.verify(&alice));
 
     // let res = match goofy.transfer_coin(coin, &alice) {

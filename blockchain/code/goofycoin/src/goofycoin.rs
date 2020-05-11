@@ -52,7 +52,7 @@ impl Person {
 
     pub fn transfer_coin(&self, mut coin: GoofyCoin, p: &Person) -> Result<GoofyCoin, String> {
         if (coin.verify(&self)) {
-            println!("Transferring coin ownership...");
+            println!("Transferring coin ownership to {}...", p.name());
             thread::sleep(time::Duration::from_millis(3000));
             coin.signed = p.sign(coin.unique_id.clone());
             coin.owner = p.clone();
